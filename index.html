@@ -1,0 +1,256 @@
+<DOCTYPE html> 
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Task number 9</title>
+        <link rel="stylesheet" href="DefaultTask9.css"> 
+    </head>
+    <body class="default">
+<div class="text"> Задача 9</div>
+        <table class="table"> 
+          <tr>
+              <td>
+              <p class="text2">
+                  Код программы: </br>
+Файл MatematikoGame.java </br>
+import javax.swing.*; </br>
+import java.awt.*; </br>
+import java.awt.event.ActionEvent; </br>
+import java.awt.event.ActionListener; </br>
+import java.util.ArrayList; </br>
+import java.util.Collections; </br>
+import java.util.HashMap; </br>
+import java.util.Map; </br>
+import java.util.Arrays; </br>
+import java.util.HashSet; </br>
+
+public class MatematikoGame extends JFrame { </br>
+    private static final int SIZE = 5; </br>
+    private JButton[][] cells = new JButton[SIZE][SIZE]; </br>
+    private ArrayList<Integer> deck = new ArrayList<>(); </br>
+    private JLabel scoreLabel; </br>
+
+    public MatematikoGame() { </br>
+        setTitle("Игра Математико"); </br>
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); </br>
+        setLayout(new BorderLayout()); </br>
+
+        JPanel gridPanel = new JPanel(new GridLayout(SIZE, SIZE)); </br>
+        for (int i = 0; i < SIZE; i++) { </br>
+            for (int j = 0; j < SIZE; j++) { </br>
+                cells[i][j] = new JButton(); </br>
+                cells[i][j].setFont(new Font("Arial", Font.BOLD, 20)); </br>
+                cells[i][j].addActionListener(new CellClickListener(i, j)); </br>
+                gridPanel.add(cells[i][j]); </br>
+            } </br>
+        } </br>
+
+        initializeDeck(); </br>
+
+        scoreLabel = new JLabel("Очки: 0"); </br>
+        scoreLabel.setFont(new Font("Arial", Font.BOLD, 18)); </br>
+
+        JButton drawButton = new JButton("Вытянуть карточку"); </br>
+        drawButton.addActionListener(new DrawCardListener()); </br>
+
+        JPanel controlPanel = new JPanel(); </br>
+        controlPanel.add(drawButton); </br>
+        controlPanel.add(scoreLabel); </br>
+
+        add(gridPanel, BorderLayout.CENTER); </br>
+        add(controlPanel, BorderLayout.SOUTH); </br>
+
+        setSize(400, 500); </br>
+        setLocationRelativeTo(null); </br>
+        setVisible(true); </br>
+    } </br>
+
+    private void initializeDeck() { </br>
+        for (int i = 1; i <= 13; i++) { </br>
+            for (int j = 0; j < 4; j++) { </br>
+                deck.add(i); </br>
+            } </br>
+        } </br>
+        Collections.shuffle(deck);</br> 
+    } </br>
+
+    private int drawCard() { </br>
+        if (deck.isEmpty()) { </br>
+            return -1; </br>
+        } </br>
+        return deck.remove(deck.size() - 1);</br> 
+    } </br>
+
+    private class CellClickListener implements ActionListener { </br> 
+        private int row, col; </br>
+
+        public CellClickListener(int row, int col) { </br>
+            this.row = row; </br>
+            this.col = col; </br>
+        } </br>
+
+        @Override </br>
+        public void actionPerformed(ActionEvent e) { </br>
+            int number = drawCard(); </br>
+            if (number == -1) { </br>
+                JOptionPane.showMessageDialog(null, "Карточки закончились!"); </br>
+                return; </br>
+            } </br>
+            cells[row][col].setText(String.valueOf(number)); </br>
+            cells[row][col].setEnabled(false); </br>
+            updateScore(); </br>
+        } </br>
+    } </br>
+
+    private class DrawCardListener implements ActionListener { </br>
+        @Override </br>
+        public void actionPerformed(ActionEvent e) { </br>
+            if (deck.isEmpty()) { </br>
+                JOptionPane.showMessageDialog(null, "Карточки закончились!"); </br>
+            } </br>
+        } </br>
+    } </br>
+
+    private void updateScore() { </br>
+        int score = calculateScore(); </br>
+        scoreLabel.setText("Очки: " + score); </br>
+    } </br>
+
+    private int calculateScore() { </br>
+        int score = 0; </br>
+
+        for (int i = 0; i < SIZE; i++) { </br>
+            score += calculateLineScore(getRow(i), false); </br>
+            score += calculateLineScore(getColumn(i), false); </br>
+        } </br>
+
+        score += calculateLineScore(getMainDiagonal(), true); </br>
+        score += calculateLineScore(getSecondaryDiagonal(), true); </br>
+
+        return score; </br>
+    } </br>
+
+    private ArrayList<Integer> getRow(int row) { </br>
+        ArrayList<Integer> numbers = new ArrayList<>(); </br>
+        for (int i = 0; i < SIZE; i++) { </br> 
+            String text = cells[row][i].getText(); </br>
+            if (!text.isEmpty()) { </br>
+                numbers.add(Integer.parseInt(text)); </br>
+            } </br>
+        } </br>
+        return numbers; </br>
+    } </br>
+
+    private ArrayList<Integer> getColumn(int col) { </br>
+        ArrayList<Integer> numbers = new ArrayList<>(); </br>
+        for (int i = 0; i < SIZE; i++) { </br>
+            String text = cells[i][col].getText(); </br>
+            if (!text.isEmpty()) { </br>
+                numbers.add(Integer.parseInt(text)); </br>
+            } </br>
+        } </br>
+        return numbers; </br>
+    }  </br>
+
+    private ArrayList<Integer> getMainDiagonal() { </br>
+        ArrayList<Integer> numbers = new ArrayList<>(); </br>
+        for (int i = 0; i < SIZE; i++) { </br>
+            String text = cells[i][i].getText(); </br>
+            if (!text.isEmpty()) { </br>
+                numbers.add(Integer.parseInt(text)); </br>
+            } </br>
+        } </br>
+        return numbers; </br>
+    } </br>
+
+    private ArrayList<Integer> getSecondaryDiagonal() { </br>
+        ArrayList<Integer> numbers = new ArrayList<>(); </br>
+        for (int i = 0; i < SIZE; i++) { </br>
+            String text = cells[i][SIZE - i - 1].getText(); </br>
+            if (!text.isEmpty()) { </br>
+                numbers.add(Integer.parseInt(text)); </br>
+            } </br>
+        } </br>
+        return numbers; </br>
+    } </br>
+
+    private int calculateLineScore(ArrayList<Integer> numbers, boolean isDiagonal) { </br>
+        Map<Integer, Integer> frequency = new HashMap<>(); </br>
+        for (int number : numbers) { </br>
+            frequency.put(number, frequency.getOrDefault(number, 0) + 1); </br>
+        } </br>
+
+        int score = 0; </br>
+
+        int pairCount = 0; </br>
+        int threeOfAKind = 0; </br>
+        int fourOfAKind = 0; </br> 
+        int singleOnes = 0; </br>
+        boolean hasSequence = numbers.containsAll(Arrays.asList(1, 13, 12, 11, 10)); </br>
+
+        for (int count : frequency.values()) { </br>
+            if (count == 2) </br> 
+                pairCount++; </br>
+            if (count == 3) </br>
+                threeOfAKind++; </br>
+            if (count == 4) </br>
+                fourOfAKind++; </br>
+            if (count == 1) </br>
+                singleOnes++; </br>
+        } </br>
+ 
+        if (pairCount == 1) </br>
+            score += isDiagonal ? 20 : 10; </br> 
+
+        if (pairCount == 2) </br>
+            score += isDiagonal ? 30 : 20; </br>
+ 
+        if (threeOfAKind == 1) </br>
+            score += isDiagonal ? 50 : 40; </br>
+
+        if (threeOfAKind == 1 && pairCount == 1) </br>
+            score += isDiagonal ? 90 : 80; </br>
+
+        if (fourOfAKind == 1) </br>
+            score += isDiagonal ? 170 : 160; </br>
+        if (numbers.size() == 5 && new ArrayList<>(new HashSet<>(numbers)).size() == 5)  </br> { </br>
+            score += isDiagonal ? 60 : 50; </br>
+        } </br>
+        if (singleOnes == 3 && frequency.getOrDefault(13, 0) == 2) { </br>
+            score += isDiagonal ? 110 : 100; </br>
+        } </br>
+
+        if (hasSequence) { </br>
+            score += isDiagonal ? 160 : 150; </br>
+        } </br>
+        if (frequency.getOrDefault(1, 0) == 4) { </br>
+            score += isDiagonal ? 210 : 200; </br>
+        } </br>
+        return score; </br>
+    } </br>
+    public static void main(String[] args) { </br>
+        SwingUtilities.invokeLater(MatematikoGame::new); </br>
+    } </br>
+} </br>
+                  </p>
+
+
+          </td>
+          </tr>
+<tr> 
+    <td>
+    <p class="text"> Скриншот результата </p>
+    <img class="img" src="https://github.com/newsadness/Task-number-2/blob/main/2.png?raw=true">
+    </td>
+</tr>
+          <tr>
+             <td> 
+                 <a href="https://newsadness.github.io/1st-week/"> 
+                   <button class="button"> назад </button> 
+                 </a> 
+            </td>
+          </tr>
+        </table> 
+    </body>
+</html>
+</DOCTYPE>

@@ -1,0 +1,66 @@
+.text {
+color: #2f4f4f;
+width: auto;
+height: auto;
+text-align: justify;
+padding: 10px;
+font-size: 80px;
+font-family: "Arial Black";
+margin-top: 50px;
+margin-left: 25%;
+    
+
+    
+
+}
+
+
+.default {
+    background-color:#dff5f2;
+    
+    
+}
+
+.text2 {
+color: #2f4f4f;
+width: auto;
+height: auto;
+text-align: justify;
+font-size: 28px;
+font-family: "Arial Black";
+}
+
+.space {
+    
+    height: 40px;
+
+}
+
+
+.img {
+    width: 1640px;
+    height: 720px;
+    
+    
+    
+}
+
+
+.button {
+    color: #2f4f4f;
+    background-color:#87dfd6;
+    font-family: "Arial Black";
+    text-align: center;
+    font-size: 40px;
+    padding: 20px;
+    margin-left: 60px;
+    border-radius: 25px;
+    
+}
+
+
+
+.table {
+    margin-left: 40%;
+    
+}
